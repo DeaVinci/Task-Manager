@@ -15,8 +15,27 @@ Prosty menedżer zadań napisany w Pythonie – z obsługą terminów, priorytet
 
 1. **Sklonuj projekt**:
    ```bash
-   git clone <repo_url>
-   cd menedzer-zadan
+   git clone https://github.com/DeaVinci/Task-Manager.git
+   cd .\Task-Manager\
 
 2. **Uruchom aplikację**:
    python main.py
+
+3. **Utwórz i aktywuj środowisko**:
+   python -m venv venv
+   venv\Scripts\activate
+
+4. **Zainstaluj zależności**:
+   pip install -r requirements.txt
+
+## Dokumentacja
+
+python -m pydoc -w zadania
+
+## Autor
+
+Patryk Woźnicka
+
+## Licencja
+
+MIT
