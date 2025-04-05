@@ -19,13 +19,16 @@ Prosty menedżer zadań napisany w Pythonie – z obsługą terminów, priorytet
    cd .\Task-Manager\
 
 2. **Uruchom aplikację**:
+   ```bash
    python main.py
 
 3. **Utwórz i aktywuj środowisko**:
+   ```bash
    python -m venv venv
    venv\Scripts\activate
 
 4. **Zainstaluj zależności**:
+   ```bash
    pip install -r requirements.txt
 
 ## Dokumentacja
