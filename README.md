@@ -20,3 +20,22 @@ Prosty menedżer zadań napisany w Pythonie – z obsługą terminów, priorytet
 
 2. **Uruchom aplikację**:
    python main.py
+
+3. **Utwórz i aktywuj środowisko**:
+   python -m venv venv
+   venv\Scripts\activate
+
+4. **Zainstaluj zależności**:
+   pip install -r requirements.txt
+
+## Dokumentacja
+
+python -m pydoc -w zadania
+
+## Autor
+
+Patryk Woźnicka
+
+## Licencja
+
+MIT
