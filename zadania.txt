@@ -1,0 +1,2 @@
+ZadaniePriorytetowe|Sprzatanie|Nowy Opis|2025-04-20|False|1
+ZadaniePriorytetowe|Gotowanie|Dodatkowy zmieniony opis|2025-04-20|False|3
