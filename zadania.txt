@@ -1,2 +1,4 @@
 ZadaniePriorytetowe|Sprzatanie|Nowy Opis|2025-04-20|False|1
 ZadaniePriorytetowe|Gotowanie|Dodatkowy zmieniony opis|2025-04-20|False|3
+ZadaniePriorytetowe|Mycie naczyń|rrr|2025-04-20|False|2
+ZadaniePriorytetowe|rrr|rrr|2025-04-20|False|5|lokalizacja=fds|kategoria=sdf

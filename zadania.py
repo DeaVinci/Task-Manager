@@ -107,50 +107,76 @@ class ManagerZadan:
     @zmierz_czas
     def zapisz_do_pliku(self, nazwa_pliku="zadania.txt"):
         """
-        Zapisuje zadania do pliku tekstowego.
-        :param nazwa_pliku: Nazwa pliku, domyślnie 'zadania.txt'
+        Zapisuje wszystkie zadania do pliku tekstowego w formacie tekstowym.
+
+        :param nazwa_pliku: Nazwa pliku do zapisu (domyślnie 'zadania.txt')
         """
         with open(nazwa_pliku, "w", encoding="utf-8") as plik:
             for zadanie in self.lista_zadan:
                 typ = type(zadanie).__name__
-                dane = [typ, zadanie.tytul, zadanie.opis, zadanie.termin_wykonania.strftime("%Y-%m-%d"), str(zadanie.wykonane)]
+                dane = [
+                    typ,
+                    zadanie.tytul,
+                    zadanie.opis,
+                    zadanie.termin_wykonania.strftime("%Y-%m-%d"),
+                    str(zadanie.wykonane)
+                ]
                 if isinstance(zadanie, ZadaniePriorytetowe):
                     dane.append(str(zadanie.priorytet))
                 elif isinstance(zadanie, ZadanieRegularne):
                     dane.append(zadanie.powtarzalnosc)
+
+                # Dodajemy **kwargs jeśli istnieją
+                if hasattr(zadanie, "dodatkowe") and isinstance(zadanie.dodatkowe, dict):
+                    for klucz, wartosc in zadanie.dodatkowe.items():
+                        dane.append(f"{klucz}={wartosc}")
+
                 plik.write("|".join(dane) + "\n")
+
 
     @zmierz_czas
     def wczytaj_z_pliku(self, nazwa_pliku="zadania.txt"):
         """
-        Wczytuje zadania z pliku tekstowego.
+        Wczytuje zadania z pliku tekstowego i przywraca je do listy zadań.
 
-        :param nazwa_pliku: Nazwa pliku, domyślnie 'zadania.txt'
+        :param nazwa_pliku: Nazwa pliku do odczytu (domyślnie 'zadania.txt')
         """
-        try:
-            with open(nazwa_pliku, "r", encoding="utf-8") as plik:
-                for linia in plik:
-                    czesci = linia.strip().split("|")
-                    typ = czesci[0]
-                    tytul = czesci[1]
-                    opis = czesci[2]
-                    termin = czesci[3]
-                    wykonane = czesci[4] == "True"
+        self.lista_zadan = []
 
-                    if typ == "ZadaniePriorytetowe":
-                        priorytet = int(czesci[5])
-                        zadanie = ZadaniePriorytetowe(tytul, opis, termin, priorytet)
-                    elif typ == "ZadanieRegularne":
-                        powtarzalnosc = czesci[5]
-                        zadanie = ZadanieRegularne(tytul, opis, termin, powtarzalnosc)
-                    else:
-                        zadanie = Zadanie(tytul, opis, termin)
+        with open(nazwa_pliku, "r", encoding="utf-8") as plik:
+            for linia in plik:
+                czesci = linia.strip().split("|")
+                typ = czesci[0]
+                tytul = czesci[1]
+                opis = czesci[2]
+                termin = czesci[3]
+                wykonane = czesci[4] == "True"
 
-                    zadanie.wykonane = wykonane
-                    self.lista_zadan.append(zadanie)
-            print("Zadania wczytane z pliku.")
-        except FileNotFoundError:
-            print("Plik nie istnieje. Zostanie utworzony przy pierwszym zapisie.")
+                # Wyodrębnij dane zależne od typu
+                dodatkowe = {}
+                if typ == "ZadaniePriorytetowe":
+                    priorytet = int(czesci[5])
+                    kw_start = 6
+                    zadanie = ZadaniePriorytetowe(tytul, opis, termin, priorytet)
+                elif typ == "ZadanieRegularne":
+                    powtarzalnosc = czesci[5]
+                    kw_start = 6
+                    zadanie = ZadanieRegularne(tytul, opis, termin, powtarzalnosc)
+                else:
+                    kw_start = 5
+                    zadanie = Zadanie(tytul, opis, termin)
+
+                # Parsowanie dodatkowych danych kwargs (np. lokalizacja=Pokój, kategoria=dom)
+                for item in czesci[kw_start:]:
+                    if "=" in item:
+                        klucz, wartosc = item.split("=", 1)
+                        dodatkowe[klucz] = wartosc
+
+                if dodatkowe:
+                    zadanie.dodatkowe = dodatkowe
+
+                zadanie.wykonane = wykonane
+                self.lista_zadan.append(zadanie)
 
     @zmierz_czas
     def wyswietl_zadania(self):
